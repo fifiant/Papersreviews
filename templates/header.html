@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="misebo.css" type="text/css" />
+		<script type="text/javascript" language="JavaScript" src="missebo.js"></script>
+		<link rel="stylesheet" href="/site_media/css/papers.css" type="text/css" />
+	</head>
+	<title>Papers !!!</title>
+	<body>
+		<div class='topbar'>
+			<div class='topbar-inner'>
+				<div class='container'>
+					<a class='brand' href='/'>Accueil</a>
+					<ul class='nav'>
+						<li>
+							<a href='#'>Deposer une annonce</a>
+						</li>
+						<li>
+							<a href='#'>Aide</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		toto
+		toto
+		toto
+		toto
+		<br/>
+		toto
+		<br />
+		<div class='container'>
+			<div class='page-header'>
+				<h1>Papers reviews</h1>
+			</div>
+			<br/>
+				<div class="input">
+					<table>
+						<form method="get" action=".">{% csrf_token %}
+						<tbody>
+							<tr>
+								<td>
+								<input id="id_key" type="text" class="span8" name="key">
+								{{ form.key }}
+								<input type="submit" value="Search papers" class="btn primary"/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+								<input id="ctitle" type="checkbox" value="1" name="it"> Recherche dans le titre uniquement  
+								</td>
+							</tr>
+							<tr>
+								<td>
+								<input id="ctitle" type="checkbox" value="1" name="it1"> Recherche dans abstract
+								</td>
+							</tr>
+						</tbody>
+						</form>
+					</table>
+				</div>
