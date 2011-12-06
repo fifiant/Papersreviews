@@ -1,0 +1,54 @@
+{% include "search/header.html" %}
+<div class="span12">
+	{% if show_results %}
+	{% if papers %}
+	{% for paper in papers %}
+	<table>
+		<tbody>
+			<tr>
+				<td><h2>Title</h2></td>
+				<td>{{ paper.title }}</td>
+			</tr>
+			<tr>
+				<td><h2>Authors</h2></td>
+				<td>
+				{% if authors %} 
+				{% for author in authors %}
+				{{ author.name }}
+				{% endfor %} 
+				{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<td><h2>Abstract</h2></td>
+				<td>{{ paper.abstract }}</td>
+			</tr>
+			<tr>
+				<td><h2>Link</h2></td>
+				<td>
+				{% if files %} 
+				{% for file in files %}
+				<a href="/pdf/{{ file.name }}.pdf">{{ file.name }}</a>
+				{% endfor %} 
+				{% endif %}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	{% endfor %}
+	{% endif %}
+	{% else %}
+	Any paper match with this keyword !!!
+	{% endif %}
+	
+	{% if show_paginator %}
+	<div class="paginator">
+		{% if has_prev %} <a href="?page={{ prev_page }}">&laquo; Previous</a>
+		{% endif %}
+		{% if has_next %} <a href="?page={{ next_page }}">Next &raquo;</a>
+		{% endif %}
+		(Page {{ page }} of {{ pages }})
+	</div>
+	{% endif %}
+</div>
+{% include "search/footer.html" %} 

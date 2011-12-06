@@ -2,18 +2,26 @@ from django.http import HttpResponse
 from django.http import HttpResponseNotFound
 from Papersreviews.papers.models import Papers
 from Papersreviews.papers.models import Authors
+from Papersreviews.papers.models import Files
 from django.template import loader, Context, RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
 from django.db.models import Q
 from django.core.paginator import Paginator
 from Papersreviews.papers.forms import *
 from django.core.context_processors import csrf
+from filetransfers.api import serve_file
 
 def index(request):
     PAPERS_PER_PAGE = 1
     page_tile = ''
+    # get papers List
     pl = get_list_or_404(Papers)
+    # get papers list per number
     paginator = Paginator(pl, PAPERS_PER_PAGE)
+    # get authors List
+    authors = get_list_or_404(Authors)
+    # get files List
+    files = get_list_or_404(Files)
     try:
         page_number = int(request.GET['page'])
     except (KeyError, ValueError):
@@ -23,13 +31,12 @@ def index(request):
     except InvalidPage:
         raise Http404
     papers = page.object_list
-    authors = get_list_or_404(Authors)
-    authorsByPapers = getAuthorsByPapers(authors, pl)
-    for a in getAuthorsByPapers(authors, pl):
-        print a.name
+    authorsByPapers = getAuthorsByPapers(authors, papers)
+    fileByPapers = getFileByPapers(files,papers)
     variables = RequestContext(request, {
     'papers': papers,
     'authors':authorsByPapers,
+    'files':fileByPapers,
     'show_tags': True,
     'show_paginator': paginator.num_pages > 1,
     'has_prev': page.has_previous(),
@@ -41,13 +48,10 @@ def index(request):
     })
     form = SearchForm(request.GET)
     if form.is_valid():
-        print form.cleaned_data['key']
+        print form.cleaned_data['query']
     else:
         print 'not valid'
-    #t = loader.get_template('body.html')
-    c = Context({'papers': pl, 'authors':authorsByPapers})
-    #return HttpResponse(t.render(c))
-    return render_to_response('body.html', variables)
+    return render_to_response('papers/body.html', variables)
     #return render_to_response('main/index.html', context_instance=RequestContext(request))
     
 def getAuthorsByPapers(authors, papers):
@@ -58,29 +62,14 @@ def getAuthorsByPapers(authors, papers):
                 authorList.append(author)
         return authorList
     return None
-
-def search_page(request):
-    form = SearchForm()
-    papers = []
-    show_results = False
-    if 'query' in request.GET:
-        show_results = True
-        query = request.GET['query'].strip()
-        if query:
-            keywords = query.split()
-            q = Q()
-            for keyword in keywords:
-                q = q & Q(title__icontains=keyword)
-            form = SearchForm({'query' : query})
-            bookmarks = Bookmark.objects.filter(q)[:10]
-    variables = RequestContext(request, {
-    'form': form,
-    'papers': papers,
-    'show_results': show_results,
-    'show_tags': True,
-    'show_user': True
-    })
-    return render_to_response('body.html', variables)
+def getFileByPapers(files, papers):
+    fileList = []
+    for p in papers:
+        for file in files:
+            if file.papers == p:
+                fileList.append(file)
+        return fileList
+    return None
 
 
 

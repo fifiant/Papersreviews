@@ -3,7 +3,7 @@ import os.path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-
+PRIVATE_DIR = '/home/fernand/Documents/dev/django/Papersreviews/pdf'
 ADMINS = (
     ('Fawaz PARAISO', 'fifiant@gmail.com'),
 )
@@ -119,7 +119,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    'Papersreviews.papers'
+    'Papersreviews.papers',
+    'Papersreviews.search',
+    'Papersreviews.download',
+    'Papersreviews.deposer',
+    'filetransfers',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

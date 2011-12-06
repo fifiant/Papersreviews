@@ -1,5 +1,8 @@
 from django.db import models
 from ContentTypeRestrictedFileField import ContentTypeRestrictedFileField
+from django.core.files.storage import FileSystemStorage
+from settings import PRIVATE_DIR
+fs = FileSystemStorage(location=PRIVATE_DIR)
 class Papers(models.Model):
     """
     Papers to review
@@ -45,7 +48,8 @@ class Files(models.Model):
     file = ContentTypeRestrictedFileField(
         upload_to='pdf',
         content_types=['application/pdf', 'application/zip', 'binary/octet-stream'],
-        max_upload_size=5242880
+        max_upload_size=5242880,
+        fileSys =fs,
     )
     created = models.DateTimeField('created', auto_now_add=True)
     modified = models.DateTimeField('modified', auto_now=True)

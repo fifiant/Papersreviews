@@ -2,6 +2,5 @@ from django.conf.urls.defaults import *
 from Papersreviews.papers.models import Papers
 
 urlpatterns = patterns('',
-    #(r'^/search/', 'Papersreviews.papers.views.search_page'),
-    (r'^$', 'Papersreviews.papers.views.index'),
+    (r'^(?P<pid>\d+)/$', 'Papersreviews.download.views.download'),
 )
